@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Wali Kelas</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="halaman-login">
+
+  <div class="kotak-login">
+    <h1>Login</h1>
+
+    <form id="form-login">
+      <input type="text" id="username" placeholder="masukan username" required>
+
+      <select id="peran" required>
+        <option value="walikelas">wali kelas</option>
+      </select>
+
+      <input type="password" id="password" placeholder="masukan pw" required>
+
+      <p id="pesan-error" class="error"></p>
+      <button type="submit" class="tombol">login</button>
+    </form>
+
+    <p class="catatan">Contoh: username <b>walikelas</b> / pw <b>12345</b></p>
+  </div>
+
+  <script>
+    // kalau sudah login, langsung ke beranda
+    if (sessionStorage.getItem("login") === "walikelas") {
+      window.location.href = "index.html";
+    }
+
+    document.getElementById("form-login").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var user = document.getElementById("username").value.trim();
+      var pass = document.getElementById("password").value;
+      var peran = document.getElementById("peran").value;
+
+      if (peran === "walikelas" && user === "walikelas" && pass === "12345") {
+        sessionStorage.setItem("login", "walikelas");
+        window.location.href = "index.html";   // menuju beranda
+      } else {
+        document.getElementById("pesan-error").textContent = "Username atau password salah!";
+      }
+    });
+  </script>
+</body>
+</html>

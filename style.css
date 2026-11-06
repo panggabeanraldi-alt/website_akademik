@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beranda - Website Akademik</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    [hidden] { display: none !important; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif !important;
+      background: #f1f5f9 !important;
+      color: #111 !important;
+      padding: 20px !important;
+    }
+
+    .bingkai {
+      max-width: 1100px;
+      min-height: 90vh;
+      margin: 0 auto;
+      background: #fff;
+      border: 3px solid #111;
+      border-radius: 6px;
+      padding: 20px;
+    }
+
+    /* tombol berjajar ke samping */
+    .bar-atas {
+      display: flex !important;
+      flex-direction: row !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      gap: 12px !important;
+      flex-wrap: wrap !important;
+      background: #fff !important;
+      padding: 0 0 20px 0 !important;
+      border-bottom: 2px solid #111 !important;
+      margin-bottom: 24px !important;
+    }
+    .bar-atas .tombol {
+      display: inline-block !important;
+      width: auto !important;
+      flex: 0 0 auto !important;
+      background: #fff !important;
+      color: #111 !important;
+      border: 2px solid #111 !important;
+      border-radius: 4px !important;
+      padding: 10px 28px !important;
+      font-size: 16px !important;
+      font-weight: bold !important;
+      cursor: pointer;
+    }
+    .bar-atas .tombol:hover,
+    .bar-atas .tombol.dipilih {
+      background: #111 !important;
+      color: #fff !important;
+    }
+
+    h2 { margin-bottom: 14px !important; color: #111 !important; text-align: left !important; }
+    p  { line-height: 1.6; color: #111 !important; text-align: left !important; }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { border: 2px solid #111; padding: 10px; text-align: left; }
+    th { background: #e2e8f0; }
+
+    .kotak-form { max-width: 480px; }
+    .kotak-form label { display: block; margin: 14px 0 6px; font-weight: bold; color: #111 !important; }
+    .kotak-form input, .kotak-form select {
+      width: 100%; padding: 10px; border: 2px solid #111; border-radius: 4px; font-size: 15px;
+    }
+    .kotak-form .tombol {
+      margin-top: 20px; background: #fff; color: #111; border: 2px solid #111;
+      border-radius: 4px; padding: 10px 28px; font-size: 16px; font-weight: bold; cursor: pointer;
+    }
+    .kotak-form .tombol:hover { background: #111; color: #fff; }
+  </style>
+</head>
+<body>
+
+  <div class="bingkai">
+
+    <div class="bar-atas">
+      <button class="tombol" data-id="data-siswa"  onclick="tampil('data-siswa')">data siswa</button>
+      <button class="tombol" data-id="data-nilai"  onclick="tampil('data-nilai')">data nilai</button>
+      <button class="tombol" data-id="formulir"    onclick="tampil('formulir')">formulir</button>
+      <button class="tombol" onclick="keluar()">log out</button>
+    </div>
+
+    <div class="isi">
+
+      <section id="beranda" class="bagian">
+        <h2>Beranda Wali Kelas</h2>
+        <p>Selamat datang. Pilih menu di atas: <b>data siswa</b>, <b>data nilai</b>, atau <b>formulir</b>.</p>
+      </section>
+
+      <section id="data-siswa" class="bagian" hidden>
+        <h2>Data Siswa</h2>
+        <table>
+          <thead>
+            <tr><th>No</th><th>NISN</th><th>Nama</th><th>Kelas</th><th>Jenis Kelamin</th></tr>
+          </thead>
+          <tbody id="isi-siswa"></tbody>
+        </table>
+      </section>
+
+      <section id="data-nilai" class="bagian" hidden>
+        <h2>Data Nilai</h2>
+        <table>
+          <thead>
+            <tr><th>No</th><th>Nama</th><th>Matematika</th><th>B. Indonesia</th><th>B. Inggris</th><th>IPA</th><th>Rata-rata</th></tr>
+          </thead>
+          <tbody id="isi-nilai"></tbody>
+        </table>
+      </section>
+
+      <section id="formulir" class="bagian" hidden>
+        <h2>Formulir Pendaftaran</h2>
+        <form id="form-daftar" class="kotak-form">
+          <label>NISN</label>
+          <input type="text" id="nisn" required>
+
+          <label>Nama Lengkap</label>
+          <input type="text" id="nama" required>
+
+          <label>Kelas</label>
+          <select id="kelas" required>
+            <option value="">-- Pilih Kelas --</option>
+            <option>X</option><option>XI</option><option>XII</option>
+          </select>
+
+          <label>Jenis Kelamin</label>
+          <select id="jk" required>
+            <option value="">-- Pilih --</option>
+            <option>Laki-laki</option><option>Perempuan</option>
+          </select>
+
+          <button type="submit" class="tombol">Daftar</button>
+        </form>
+      </section>
+
+    </div>
+  </div>
+
+  <script>
+    if (sessionStorage.getItem("login") !== "walikelas") {
+      window.location.href = "login-wali-kelas.html";
+    }
+
+    var siswa = [
+      { nisn: "1001", nama: "Andi Pratama",   kelas: "X",   jk: "Laki-laki" },
+      { nisn: "1002", nama: "Siti Aisyah",    kelas: "X",   jk: "Perempuan" },
+      { nisn: "1003", nama: "Budi Santoso",   kelas: "XI",  jk: "Laki-laki" },
+      { nisn: "1004", nama: "Dewi Lestari",   kelas: "XI",  jk: "Perempuan" },
+      { nisn: "1005", nama: "Rizky Ramadhan", kelas: "XII", jk: "Laki-laki" }
+    ];
+    var nilai = [
+      { nama: "Andi Pratama",   mtk: 85, bin: 80, big: 78, ipa: 82 },
+      { nama: "Siti Aisyah",    mtk: 90, bin: 88, big: 92, ipa: 89 },
+      { nama: "Budi Santoso",   mtk: 75, bin: 80, big: 70, ipa: 77 },
+      { nama: "Dewi Lestari",   mtk: 88, bin: 85, big: 90, ipa: 86 },
+      { nama: "Rizky Ramadhan", mtk: 80, bin: 78, big: 82, ipa: 79 }
+    ];
+
+    function ambilBaru() {
+      try { return JSON.parse(localStorage.getItem("siswaBaru")) || []; }
+      catch (e) { return []; }
+    }
+
+    function isiTabel() {
+      var html = "";
+      siswa.concat(ambilBaru()).forEach(function (s, i) {
+        html += "<tr><td>" + (i + 1) + "</td><td>" + s.nisn + "</td><td>" + s.nama +
+                "</td><td>" + s.kelas + "</td><td>" + s.jk + "</td></tr>";
+      });
+      document.getElementById("isi-siswa").innerHTML = html;
+
+      var h2 = "";
+      nilai.forEach(function (n, i) {
+        var rata = ((n.mtk + n.bin + n.big + n.ipa) / 4).toFixed(1);
+        h2 += "<tr><td>" + (i + 1) + "</td><td>" + n.nama + "</td><td>" + n.mtk +
+              "</td><td>" + n.bin + "</td><td>" + n.big + "</td><td>" + n.ipa +
+              "</td><td><b>" + rata + "</b></td></tr>";
+      });
+      document.getElementById("isi-nilai").innerHTML = h2;
+    }
+
+    // tampilkan SATU bagian saja
+    function tampil(id) {
+      document.querySelectorAll(".bagian").forEach(function (b) {
+        b.hidden = (b.id !== id);
+      });
+      document.querySelectorAll(".bar-atas .tombol").forEach(function (t) {
+        t.classList.toggle("dipilih", t.getAttribute("data-id") === id);
+      });
+    }
+
+    function keluar() {
+      sessionStorage.removeItem("login");
+      window.location.href = "login-wali-kelas.html";
+    }
+
+    document.getElementById("form-daftar").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var baru = ambilBaru();
+      baru.push({
+        nisn: document.getElementById("nisn").value,
+        nama: document.getElementById("nama").value,
+        kelas: document.getElementById("kelas").value,
+        jk: document.getElementById("jk").value
+      });
+      localStorage.setItem("siswaBaru", JSON.stringify(baru));
+      alert("Pendaftaran berhasil! Data masuk ke menu data siswa.");
+      this.reset();
+      isiTabel();
+      tampil("data-siswa");
+    });
+
+    isiTabel();
+    tampil("beranda");
+  </script>
+</body>
+</html>
