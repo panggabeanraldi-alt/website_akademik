@@ -116,17 +116,23 @@
       border-radius: 8px; padding: 12px 32px; font-size: 16px; font-weight: bold; cursor: pointer;
     }
     .kotak-form button:hover { background: #2563eb; }
+
+    /* ===== LOGIN ADMINISTRATOR (tambahan) ===== */
+    #pesan-admin { margin-top: 14px; font-weight: bold; }
+    #pesan-admin.salah { color: #b91c1c !important; }
+    #pesan-admin.benar { color: #15803d !important; }
   </style>
 </head>
 <body>
 
   <div class="bingkai">
 
-    <!-- ===== 4 TOMBOL BERJAJAR HORIZONTAL ===== -->
+    <!-- ===== TOMBOL BERJAJAR HORIZONTAL ===== -->
     <div id="bar">
       <button data-id="data-siswa" onclick="tampil('data-siswa')">Data Siswa</button>
       <button data-id="data-nilai" onclick="tampil('data-nilai')">Data Nilai</button>
       <button data-id="formulir"   onclick="tampil('formulir')">Formulir</button>
+      <button data-id="login-admin" onclick="tampil('login-admin')">Login Administrator</button>
       <button class="keluar"       onclick="keluar()">Log Out</button>
     </div>
 
@@ -180,6 +186,21 @@
           </select>
 
           <button type="submit">Daftar</button>
+        </form>
+      </section>
+
+      <!-- ===== LOGIN ADMINISTRATOR (tambahan) ===== -->
+      <section id="login-admin" class="bagian" hidden>
+        <h2>Login Administrator</h2>
+        <form id="form-admin" class="kotak-form">
+          <label>Username</label>
+          <input type="text" id="admin-user" autocomplete="username" required>
+
+          <label>Password</label>
+          <input type="password" id="admin-pass" autocomplete="current-password" required>
+
+          <button type="submit">Login</button>
+          <p id="pesan-admin"></p>
         </form>
       </section>
 
@@ -259,6 +280,28 @@
       this.reset();
       isiTabel();
       tampil("data-siswa");
+    });
+
+    // ===== LOGIN ADMINISTRATOR (tambahan) =====
+    // Akun contoh: username "admin", password "admin123" (ganti sesuai kebutuhan)
+    var ADMIN_USER = "admin";
+    var ADMIN_PASS = "admin123";
+
+    document.getElementById("form-admin").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var pesan = document.getElementById("pesan-admin");
+      var u = document.getElementById("admin-user").value;
+      var p = document.getElementById("admin-pass").value;
+
+      if (u === ADMIN_USER && p === ADMIN_PASS) {
+        sessionStorage.setItem("loginAdmin", "ya");
+        pesan.className = "benar";
+        pesan.textContent = "Login administrator berhasil.";
+        this.reset();
+      } else {
+        pesan.className = "salah";
+        pesan.textContent = "Username atau password salah.";
+      }
     });
 
     isiTabel();
